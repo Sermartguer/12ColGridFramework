@@ -1,0 +1,90 @@
+$default:1280px;
+$md:1280px;
+$sm:1024px;
+$xs:768px;
+$ps:480px;
+$responsive-sizes:(
+  "default":("min-width": $default),
+  "md":("max-width": $md),
+  "sm":("max-width": $sm),
+  "xs":("max-width": $xs),
+  "ps":("max-width": $ps)
+);
+$columns:12;
+@mixin rowalign($align) {
+  -webkit-box-pack: $align;
+  -ms-flex-pack: $align;
+  justify-content: $align;
+}
+@mixin colalign($align) {
+  -webkit-box-align: $align;
+  -ms-flex-align: $align;
+  align-items: $align;
+}
+@mixin name {
+
+}
+@mixin rowalignment {
+  .start{
+    @include rowalign(start);
+  }
+  .center{
+    @include rowalign(center);
+  }
+  .end{
+    @include rowalign(end);
+  }
+  .top{
+    @include colalign(flex-start);
+  }
+  .middle{
+    @include colalign(center);
+  }
+  .bottom{
+    @include colalign(flex-end);
+  }
+  .around{
+    @include rowalign(space-around);
+  }
+  .between{
+    @include rowalign(space-between);
+  }
+}
+
+@each $key, $value in $responsive-sizes {
+  @if ($key == default){
+    $min-width: map-get($value, "min-width");
+    @media screen and (min-width: $min-width) {
+      @include rowalignment;
+      @for $i from 1 through $columns {
+        .col-#{$i} {
+          -ms-flex-preferred-size: (100%/12*$i);
+          flex-basis: (100%/12*$i);
+          max-width: (100%/12*$i);
+        }
+    }
+    @for $i from 1 through $columns {
+      .col-off-left-#{$i} {
+        margin-left: (100%/12*$i);
+      }
+    }
+    @for $i from 1 through $columns {
+      .col-off-right-#{$i} {
+        margin-left: (100%/12*$i);
+      }
+    }
+  }
+  }@else{
+    $max-width: map-get($value, "max-width");
+    @media screen and (max-width: $max-width) {
+      @for $i from 1 through $columns {
+        .col-#{$key}-#{$i} {
+          -ms-flex-preferred-size: (100%/12*$i);
+          flex-basis: (100%/12*$i);
+          max-width: (100%/12*$i);
+        }
+    }
+    }
+  }
+
+}
